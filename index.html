@@ -1,0 +1,2943 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/_7_2.js"></script>
+        <script src="data/_3.js"></script>
+        <script src="data/_7_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#00ffff',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#00ffff',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[14.745284255155713,100.22350802889851],[16.827422627823612,103.9591289816334]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleTerrainHybrid_0');
+        map.getPane('pane_GoogleTerrainHybrid_0').style.zIndex = 400;
+        var layer_GoogleTerrainHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleTerrainHybrid_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleTerrainHybrid_0;
+        map.addLayer(layer_GoogleTerrainHybrid_0);
+        map.createPane('pane_GoogleSatelliteHybrid_1');
+        map.getPane('pane_GoogleSatelliteHybrid_1').style.zIndex = 401;
+        var layer_GoogleSatelliteHybrid_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatelliteHybrid_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleSatelliteHybrid_1;
+        map.addLayer(layer_GoogleSatelliteHybrid_1);
+        function pop__7_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perimeter</th>\
+                        <td>' + (feature.properties['Perimeter'] !== null ? autolinker.link(feature.properties['Perimeter'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area__RAI_</th>\
+                        <td>' + (feature.properties['Area__RAI_'] !== null ? autolinker.link(feature.properties['Area__RAI_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name_TH</th>\
+                        <td>' + (feature.properties['Name_TH'] !== null ? autolinker.link(feature.properties['Name_TH'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANN_Date</th>\
+                        <td>' + (feature.properties['ANN_Date'] !== null ? autolinker.link(feature.properties['ANN_Date'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Law_Type</th>\
+                        <td>' + (feature.properties['Law_Type'] !== null ? autolinker.link(feature.properties['Law_Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANN_BOOK_I</th>\
+                        <td>' + (feature.properties['ANN_BOOK_I'] !== null ? autolinker.link(feature.properties['ANN_BOOK_I'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>ANN_SECTIO</strong><br />' + (feature.properties['ANN_SECTIO'] !== null ? autolinker.link(feature.properties['ANN_SECTIO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANN_AREA_R</th>\
+                        <td>' + (feature.properties['ANN_AREA_R'] !== null ? autolinker.link(feature.properties['ANN_AREA_R'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DNP_CODE</th>\
+                        <td>' + (feature.properties['DNP_CODE'] !== null ? autolinker.link(feature.properties['DNP_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">N_Full</th>\
+                        <td>' + (feature.properties['N_Full'] !== null ? autolinker.link(feature.properties['N_Full'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? autolinker.link(feature.properties['Shape_Leng'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Shape_Area</th>\
+                        <td>' + (feature.properties['Shape_Area'] !== null ? autolinker.link(feature.properties['Shape_Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style__7_2_0(feature) {
+            switch(String(feature.properties['N_Full'])) {
+                case 'เขตรักษาพันธุ์สัตว์ป่าซับลังกา':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(48,18,59,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตรักษาพันธุ์สัตว์ป่าดงใหญ่':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(59,47,127,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตรักษาพันธุ์สัตว์ป่าตะเบาะ - ห้วยใหญ่':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(66,74,180,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตรักษาพันธุ์สัตว์ป่าผาผึ้ง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,101,220,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตรักษาพันธุ์สัตว์ป่าภูเขียว':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,126,245,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าเขากระโดง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(65,151,255,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าเขาแผงม้า':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(49,175,245,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าบึงละหาน':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(32,199,223,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าป่าเขาภูหลวง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(24,219,198,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าลำนางรอง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(32,234,173,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าหนองแวง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(58,244,144,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำสนามบิน':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(94,252,110,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยจรเข้มาก':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,255,81,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยตลาด':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(164,252,60,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'สวนรุกขชาติน้ำผุดทัพลาว':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,244,52,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'สวนรุกขชาติภูกุ้มข้าว':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(214,230,53,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติเขาใหญ่':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,212,57,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติเจ็ดสาวน้อย':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,192,58,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติตาดโตน':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,169,51,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติตาพระยา':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,141,39,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติทับลาน':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,111,26,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติไทรทอง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,83,15,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติน้ำพอง':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,62,8,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติน้ำหนาว':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(203,43,4,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติป่าหินงาม':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,27,1,0.504)',
+                interactive: true,
+            }
+                    break;
+                case 'อุทยานแห่งชาติภูแลนคา':
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,14,1,0.504)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane__7_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.504)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,4,3,0.504)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane__7_2');
+        map.getPane('pane__7_2').style.zIndex = 402;
+        map.getPane('pane__7_2').style['mix-blend-mode'] = 'normal';
+        var layer__7_2 = new L.geoJson(json__7_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__7_2',
+            layerName: 'layer__7_2',
+            pane: 'pane__7_2',
+            onEachFeature: pop__7_2,
+            style: style__7_2_0,
+        });
+        bounds_group.addLayer(layer__7_2);
+        map.addLayer(layer__7_2);
+        function pop__3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Id</th>\
+                        <td>' + (feature.properties['Id'] !== null ? autolinker.link(feature.properties['Id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name_th</th>\
+                        <td>' + (feature.properties['Name_th'] !== null ? autolinker.link(feature.properties['Name_th'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Remark</th>\
+                        <td>' + (feature.properties['Remark'] !== null ? autolinker.link(feature.properties['Remark'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROV_NAM_T</th>\
+                        <td>' + (feature.properties['PROV_NAM_T'] !== null ? autolinker.link(feature.properties['PROV_NAM_T'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RAI</th>\
+                        <td>' + (feature.properties['RAI'] !== null ? autolinker.link(feature.properties['RAI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">area</th>\
+                        <td>' + (feature.properties['area'] !== null ? autolinker.link(feature.properties['area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style__3_0() {
+            return {
+                pane: 'pane__3',
+                opacity: 1,
+                color: 'rgba(51,160,44,0.506)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,0.506)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane__3');
+        map.getPane('pane__3').style.zIndex = 403;
+        map.getPane('pane__3').style['mix-blend-mode'] = 'normal';
+        var layer__3 = new L.geoJson(json__3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__3',
+            layerName: 'layer__3',
+            pane: 'pane__3',
+            onEachFeature: pop__3,
+            style: style__3_0,
+        });
+        bounds_group.addLayer(layer__3);
+        map.addLayer(layer__3);
+        function pop__7_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OBJECTID_1</th>\
+                        <td>' + (feature.properties['OBJECTID_1'] !== null ? autolinker.link(feature.properties['OBJECTID_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name_st</th>\
+                        <td>' + (feature.properties['Name_st'] !== null ? autolinker.link(feature.properties['Name_st'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">E</th>\
+                        <td>' + (feature.properties['E'] !== null ? autolinker.link(feature.properties['E'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">N</th>\
+                        <td>' + (feature.properties['N'] !== null ? autolinker.link(feature.properties['N'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Zone</th>\
+                        <td>' + (feature.properties['Zone'] !== null ? autolinker.link(feature.properties['Zone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">lat</th>\
+                        <td>' + (feature.properties['lat'] !== null ? autolinker.link(feature.properties['lat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Long</th>\
+                        <td>' + (feature.properties['Long'] !== null ? autolinker.link(feature.properties['Long'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">remark</th>\
+                        <td>' + (feature.properties['remark'] !== null ? autolinker.link(feature.properties['remark'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">type</th>\
+                        <td>' + (feature.properties['type'] !== null ? autolinker.link(feature.properties['type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">123</th>\
+                        <td>' + (feature.properties['123'] !== null ? autolinker.link(feature.properties['123'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name_th</th>\
+                        <td>' + (feature.properties['Name_th'] !== null ? autolinker.link(feature.properties['Name_th'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">name2</th>\
+                        <td>' + (feature.properties['name2'] !== null ? autolinker.link(feature.properties['name2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style__7_4_0(feature) {
+            switch(String(feature.properties['Name_th'])) {
+                case 'โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่านายางกลัก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(3,5,26,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่าภูแลนคาด้านทิศใต้':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(5,6,27,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่าวังน้ำเขียว จ.นครราชสีมา':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(7,7,29,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดเขาขาด':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(10,9,31,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดเขื่อนจุฬาภรณ์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(12,10,33,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดชั่วคราวเขาโซ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(15,11,35,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดชั่วคราวบ้านน้อยหลักไฟ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(18,13,37,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดชั่วคราวป่าเหล่าไห่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,14,38,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดตลาดควาย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(23,15,40,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดถลุงมาศ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(26,16,42,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดที่ 1 (เขาสูง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(29,17,44,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดเทพารักษ์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(32,18,46,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดบ้านสระ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(34,19,49,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดประมง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(37,20,51,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดป่าสัก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(40,21,53,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดภูคิ้ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,22,55,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดร้อยล้าน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,23,57,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดโล่ใหญ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(49,24,59,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดสามแยกบ้านไร่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(52,25,61,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดสายใจ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(54,25,63,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดหนองใหญ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(57,26,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดห้วยเพียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(60,26,66,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดห้วยอีด่าน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(63,27,67,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดห้าพันไร่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(66,27,69,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'จุดสกัดแหละตองกุง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(69,28,71,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.1 (ดงเค็ง) จ.บุรีรัมย์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(72,28,72,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.2 (เขายายหอม) จ.ชัยภูมิ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(75,29,74,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.3 (ภูตะเภา) จ.ชัยภูมิ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(78,29,75,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.4 (เขาภุหลวง) จ.นครราชสีมา':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(81,30,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ฐานปฏิบัติการ (หุบทองหลาง-ป่าสัก)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,30,78,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ด่านตรวจโคกเต็ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(87,30,79,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ด่านตรวจซับยาง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(90,30,81,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ด่านตรวจหนองไผ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(93,31,82,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตรักษาพันธุ์สัตว์ป่าดงใหญ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(97,31,83,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตรักษาพันธุ์สัตว์ป่าผาผึ้ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(99,31,83,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตรักษาพันธุ์สัตว์ป่าภูเขียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,31,84,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าเขาแผงม้า':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,31,85,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าบึงละหาน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(109,31,86,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าป่าเขาภูหลวง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(112,31,87,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าภูเขาไฟกระโดง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,31,88,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าลำนางรอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(118,31,88,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าหนองแวง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,31,89,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำสนามบิน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,31,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยจรเข้มาก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,30,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยตลาด':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(131,30,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการศูนย์ศึกษาการพัฒนาการจัดการเขตรักษาพันธุ์สัตว์ป่า ที่ 2 (ภาคตะวันออกเฉียงเหนือ)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(135,30,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการศูนย์ศึกษาธรรมชาติและสัตว์ป่าห้วยกุ่ม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(138,29,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการสถานีควบคุมไฟป่าเขาใหญ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(141,29,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการสถานีเพาะเลี้ยงสัตว์ป่าภูเขียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,29,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการอุทยานแห่งชาติตาดโตน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(148,28,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการอุทยานแห่งชาติไทรทอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(151,28,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการอุทยานแห่งชาติป่าหินงาม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,27,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ที่ทำการอุทยานแห่งชาติภูแลนคา':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(158,26,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์ข้อมูลการอนุรักษ์สัตว์ป่าและพื้นที่ชุ่มน้ำจังหวัดบุรีรัมย์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(161,26,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์บริการนักท่องเที่ยว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(164,25,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์บริการนักท่องเที่ยวอุทยานป่าหินงาม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(168,24,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์บริการนักท่องเที่ยวอุทยานแห่งชาติไทรทอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(171,24,90,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 1 (ทุ่งกะมัง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(174,23,89,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 2 (ปางม่วง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(177,23,88,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 3 (โนนเขวา)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(181,22,87,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 4 (กุดจิก)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(184,22,87,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 5 (สะพุงเหนือ)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(187,22,86,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ศูนย์พิทักษ์ป่าภูเขียวที่ 6 (บ้านโหล่น)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,22,85,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'สถานีควบคุมไฟป่าดงใหญ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(193,23,84,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'สถานีควบคุมไฟป่าตาดโตน-ภูแลนคา':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(196,23,83,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'สถานีควบคุมไฟป่าทับลาน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,25,81,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'สถานีควบคุมไฟป่าภูเขียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(202,26,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'สถานีควบคุมไฟป่าวังน้ำเขียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,28,78,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำคลองไผ่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(207,30,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำคลองไผ่ (สาขาลำนางรอง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(210,32,76,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำคลองสอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(212,34,74,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำชีลอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,37,73,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำทุ่งลุยลาย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(217,40,71,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำลำเจา':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,42,70,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำลำตะคอง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,45,69,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำลำปะทาว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(223,48,68,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยจัดการต้นน้ำหลังสัน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,51,66,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่กุดจิก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,54,65,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่เขาจันทร์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,57,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่คลองโป่ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,61,63,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่ตะเคียนงาม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,64,62,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่เนินหอม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,68,62,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยดับไฟป่าเคลื่อนที่ละเลิงรูร้อย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,72,62,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยป้องกันรักษาป่าที่ บร.6 (เขากระโดง) จ.บุรีรัมย์':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,76,62,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.1 (เขาวง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,79,62,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.2 (ห้วยเสือดาว)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(238,83,63,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.3 (บ้านใหม่สามัคคี)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(239,87,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.4 (สำนักตูมกา)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(239,91,65,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.5 (คลองไทร)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,95,66,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ทท.6 (ราษฎร์ภักดี)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(241,99,68,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ตน.2 (ชีลองเหนือ)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(241,102,70,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ตน.3 (ตาดฟ้า)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,105,72,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ตน.4 (หนอกนกเขา)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,109,75,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ตน.5 (ซับสมบูรณ์)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,113,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ตน.6 (เขาช่องลม)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,116,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ปง.1 (เขาพนมโดม)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,120,82,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ปง.2 (เสลี่ยงทอง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,124,85,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ภค.1 (ภูคี)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,126,88,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ภค.2 (พานทอง)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,130,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ฯ ที่ ภค.3 (ป่าปรงพันปี)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,133,94,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่ากุดเลาะ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,137,96,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าเก่าน้อย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,140,99,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าแก้งตาดไซ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,143,102,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าเขากระเจียว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,147,106,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าคลองเจริญ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,150,108,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าคลองโป่ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,153,112,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าฉนวน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,156,115,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าซับหวาย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,160,119,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าถ้ำสิงโต':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,163,122,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าท่าเดื่อ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,166,126,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าน้ำผุด':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,169,129,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าโนนศรีสง่า':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,172,132,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าบ่อมีงาม  (เขากระป็อด)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,175,136,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าบึงแปน':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,178,140,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าพรมโซ้ง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,181,144,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าละเลิงร้อยรู':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,184,148,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าลาดนกเจ่า':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,187,152,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าศาลาพรม':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,190,155,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าหนองนกออก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,193,159,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าหนองแปก':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,196,164,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าหนองไรไก่':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,199,168,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าห้วยกล่ำ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,202,172,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าห้วยแก้ว':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,205,177,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์ป่าห้วยซุ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,208,181,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยพิทักษ์อุทยานแห่งชาติชั่วคราว (ผาหัวนาค)':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,210,185,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยสกัดเขาพังเหย':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,213,189,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยสกัดหนองปล้อง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,216,194,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยสกัดห้วยยางดี':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,219,198,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หน่วยอนุรักษ์และจัดการต้นน้ำลำพระเพลิง':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(249,222,202,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หอควบคุมรั้วไฟฟ้าที่ 1':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(249,225,206,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หอควบคุมรั้วไฟฟ้าที่ 2':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(249,227,210,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'หอควบคุมรั้วไฟฟ้าที่ 3':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,230,214,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'ห้องปฏิบัติการลาดตระเวนเชิงคุณภาพ':
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,233,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane__7_4',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,235,221,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane__7_4');
+        map.getPane('pane__7_4').style.zIndex = 404;
+        map.getPane('pane__7_4').style['mix-blend-mode'] = 'normal';
+        var layer__7_4 = new L.geoJson(json__7_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__7_4',
+            layerName: 'layer__7_4',
+            pane: 'pane__7_4',
+            onEachFeature: pop__7_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style__7_4_0(feature));
+            },
+        });
+        var cluster__7_4 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster__7_4.addLayer(layer__7_4);
+
+        bounds_group.addLayer(layer__7_4);
+        cluster__7_4.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'ที่ตั้งหน่วยงาน_สบอ7<br /><table><tr><td style="text-align: center;"><img src="legend/_7_4_โครงการพฒนาปาไมตามแนวพระราชดำรปานายางกลก0.png" /></td><td>โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่านายางกลัก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_โครงการพฒนาปาไมตามแนวพระราชดำรปาภแลนคาดานทศใต1.png" /></td><td>โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่าภูแลนคาด้านทิศใต้</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_โครงการพฒนาปาไมตามแนวพระราชดำรปาวงนำเขยวจนครราชสมา2.png" /></td><td>โครงการพัฒนาป่าไม้ตามแนวพระราชดำริป่าวังน้ำเขียว จ.นครราชสีมา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดเขาขาด3.png" /></td><td>จุดสกัดเขาขาด</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดเขอนจฬาภรณ4.png" /></td><td>จุดสกัดเขื่อนจุฬาภรณ์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดชวคราวเขาโซ5.png" /></td><td>จุดสกัดชั่วคราวเขาโซ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดชวคราวบานนอยหลกไฟ6.png" /></td><td>จุดสกัดชั่วคราวบ้านน้อยหลักไฟ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดชวคราวปาเหลาไห7.png" /></td><td>จุดสกัดชั่วคราวป่าเหล่าไห่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดตลาดควาย8.png" /></td><td>จุดสกัดตลาดควาย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดถลงมาศ9.png" /></td><td>จุดสกัดถลุงมาศ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดท1เขาสง10.png" /></td><td>จุดสกัดที่ 1 (เขาสูง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดเทพารกษ11.png" /></td><td>จุดสกัดเทพารักษ์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดบานสระ12.png" /></td><td>จุดสกัดบ้านสระ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดประมง13.png" /></td><td>จุดสกัดประมง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดปาสก14.png" /></td><td>จุดสกัดป่าสัก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดภคง15.png" /></td><td>จุดสกัดภูคิ้ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดรอยลาน16.png" /></td><td>จุดสกัดร้อยล้าน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดโลใหญ17.png" /></td><td>จุดสกัดโล่ใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดสามแยกบานไร18.png" /></td><td>จุดสกัดสามแยกบ้านไร่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดสายใจ19.png" /></td><td>จุดสกัดสายใจ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดหนองใหญ20.png" /></td><td>จุดสกัดหนองใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดหวยเพยว21.png" /></td><td>จุดสกัดห้วยเพียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดหวยอดาน22.png" /></td><td>จุดสกัดห้วยอีด่าน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดหาพนไร23.png" /></td><td>จุดสกัดห้าพันไร่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_จดสกดแหละตองกง24.png" /></td><td>จุดสกัดแหละตองกุง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ฐานปฎบตการปองกนรกษาปาทนม1ดงเคงจบรรมย25.png" /></td><td>ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.1 (ดงเค็ง) จ.บุรีรัมย์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ฐานปฎบตการปองกนรกษาปาทนม2เขายายหอมจชยภม26.png" /></td><td>ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.2 (เขายายหอม) จ.ชัยภูมิ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ฐานปฎบตการปองกนรกษาปาทนม3ภตะเภาจชยภม27.png" /></td><td>ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.3 (ภูตะเภา) จ.ชัยภูมิ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ฐานปฎบตการปองกนรกษาปาทนม4เขาภหลวงจนครราชสมา28.png" /></td><td>ฐานปฎิบัติการป้องกันรักษาป่าที่ นม.4 (เขาภุหลวง) จ.นครราชสีมา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ฐานปฏบตการหบทองหลางปาสก29.png" /></td><td>ฐานปฏิบัติการ (หุบทองหลาง-ป่าสัก)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ดานตรวจโคกเตง30.png" /></td><td>ด่านตรวจโคกเต็ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ดานตรวจซบยาง31.png" /></td><td>ด่านตรวจซับยาง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ดานตรวจหนองไผ32.png" /></td><td>ด่านตรวจหนองไผ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตรกษาพนธสตวปาดงใหญ33.png" /></td><td>ที่ทำการเขตรักษาพันธุ์สัตว์ป่าดงใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตรกษาพนธสตวปาผาผง34.png" /></td><td>ที่ทำการเขตรักษาพันธุ์สัตว์ป่าผาผึ้ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตรกษาพนธสตวปาภเขยว35.png" /></td><td>ที่ทำการเขตรักษาพันธุ์สัตว์ป่าภูเขียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาเขาแผงมา36.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าเขาแผงม้า</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาบงละหาน37.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าบึงละหาน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาปาเขาภหลวง38.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าป่าเขาภูหลวง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาภเขาไฟกระโดง39.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าภูเขาไฟกระโดง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาลำนางรอง40.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าลำนางรอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาหนองแวง41.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าหนองแวง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาอางเกบนำสนามบน42.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำสนามบิน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาอางเกบนำหวยจรเขมาก43.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยจรเข้มาก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการเขตหามลาสตวปาอางเกบนำหวยตลาด44.png" /></td><td>ที่ทำการเขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยตลาด</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการศนยศกษาการพฒนาการจดการเขตรกษาพนธสตวปาท2ภาคตะวนออกเฉยงเหนอ45.png" /></td><td>ที่ทำการศูนย์ศึกษาการพัฒนาการจัดการเขตรักษาพันธุ์สัตว์ป่า ที่ 2 (ภาคตะวันออกเฉียงเหนือ)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการศนยศกษาธรรมชาตและสตวปาหวยกม46.png" /></td><td>ที่ทำการศูนย์ศึกษาธรรมชาติและสัตว์ป่าห้วยกุ่ม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการสถานควบคมไฟปาเขาใหญ47.png" /></td><td>ที่ทำการสถานีควบคุมไฟป่าเขาใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการสถานเพาะเลยงสตวปาภเขยว48.png" /></td><td>ที่ทำการสถานีเพาะเลี้ยงสัตว์ป่าภูเขียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการอทยานแหงชาตตาดโตน49.png" /></td><td>ที่ทำการอุทยานแห่งชาติตาดโตน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการอทยานแหงชาตไทรทอง50.png" /></td><td>ที่ทำการอุทยานแห่งชาติไทรทอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการอทยานแหงชาตปาหนงาม51.png" /></td><td>ที่ทำการอุทยานแห่งชาติป่าหินงาม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ททำการอทยานแหงชาตภแลนคา52.png" /></td><td>ที่ทำการอุทยานแห่งชาติภูแลนคา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยขอมลการอนรกษสตวปาและพนทชมนำจงหวดบรรมย53.png" /></td><td>ศูนย์ข้อมูลการอนุรักษ์สัตว์ป่าและพื้นที่ชุ่มน้ำจังหวัดบุรีรัมย์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยบรการนกทองเทยว54.png" /></td><td>ศูนย์บริการนักท่องเที่ยว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยบรการนกทองเทยวอทยานปาหนงาม55.png" /></td><td>ศูนย์บริการนักท่องเที่ยวอุทยานป่าหินงาม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยบรการนกทองเทยวอทยานแหงชาตไทรทอง56.png" /></td><td>ศูนย์บริการนักท่องเที่ยวอุทยานแห่งชาติไทรทอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท1ทงกะมง57.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 1 (ทุ่งกะมัง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท2ปางมวง58.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 2 (ปางม่วง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท3โนนเขวา59.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 3 (โนนเขวา)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท4กดจก60.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 4 (กุดจิก)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท5สะพงเหนอ61.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 5 (สะพุงเหนือ)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_ศนยพทกษปาภเขยวท6บานโหลน62.png" /></td><td>ศูนย์พิทักษ์ป่าภูเขียวที่ 6 (บ้านโหล่น)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_สถานควบคมไฟปาดงใหญ63.png" /></td><td>สถานีควบคุมไฟป่าดงใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_สถานควบคมไฟปาตาดโตนภแลนคา64.png" /></td><td>สถานีควบคุมไฟป่าตาดโตน-ภูแลนคา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_สถานควบคมไฟปาทบลาน65.png" /></td><td>สถานีควบคุมไฟป่าทับลาน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_สถานควบคมไฟปาภเขยว66.png" /></td><td>สถานีควบคุมไฟป่าภูเขียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_สถานควบคมไฟปาวงนำเขยว67.png" /></td><td>สถานีควบคุมไฟป่าวังน้ำเขียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำคลองไผ68.png" /></td><td>หน่วยจัดการต้นน้ำคลองไผ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำคลองไผสาขาลำนางรอง69.png" /></td><td>หน่วยจัดการต้นน้ำคลองไผ่ (สาขาลำนางรอง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำคลองสอง70.png" /></td><td>หน่วยจัดการต้นน้ำคลองสอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำชลอง71.png" /></td><td>หน่วยจัดการต้นน้ำชีลอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำทงลยลาย72.png" /></td><td>หน่วยจัดการต้นน้ำทุ่งลุยลาย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำลำเจา73.png" /></td><td>หน่วยจัดการต้นน้ำลำเจา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำลำตะคอง74.png" /></td><td>หน่วยจัดการต้นน้ำลำตะคอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำลำปะทาว75.png" /></td><td>หน่วยจัดการต้นน้ำลำปะทาว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยจดการตนนำหลงสน76.png" /></td><td>หน่วยจัดการต้นน้ำหลังสัน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทกดจก77.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่กุดจิก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทเขาจนทร78.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่เขาจันทร์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทคลองโปง79.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่คลองโป่ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทตะเคยนงาม80.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่ตะเคียนงาม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทเนนหอม81.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่เนินหอม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยดบไฟปาเคลอนทละเลงรรอย82.png" /></td><td>หน่วยดับไฟป่าเคลื่อนที่ละเลิงรูร้อย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยปองกนรกษาปาทบร6เขากระโดงจบรรมย83.png" /></td><td>หน่วยป้องกันรักษาป่าที่ บร.6 (เขากระโดง) จ.บุรีรัมย์</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท1เขาวง84.png" /></td><td>หน่วยพิทักษ์ฯ ทท.1 (เขาวง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท2หวยเสอดาว85.png" /></td><td>หน่วยพิทักษ์ฯ ทท.2 (ห้วยเสือดาว)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท3บานใหมสามคค86.png" /></td><td>หน่วยพิทักษ์ฯ ทท.3 (บ้านใหม่สามัคคี)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท4สำนกตมกา87.png" /></td><td>หน่วยพิทักษ์ฯ ทท.4 (สำนักตูมกา)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท5คลองไทร88.png" /></td><td>หน่วยพิทักษ์ฯ ทท.5 (คลองไทร)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทท6ราษฎรภกด89.png" /></td><td>หน่วยพิทักษ์ฯ ทท.6 (ราษฎร์ภักดี)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทตน2ชลองเหนอ90.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ตน.2 (ชีลองเหนือ)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทตน3ตาดฟา91.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ตน.3 (ตาดฟ้า)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทตน4หนอกนกเขา92.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ตน.4 (หนอกนกเขา)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทตน5ซบสมบรณ93.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ตน.5 (ซับสมบูรณ์)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทตน6เขาชองลม94.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ตน.6 (เขาช่องลม)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทปง1เขาพนมโดม95.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ปง.1 (เขาพนมโดม)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทปง2เสลยงทอง96.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ปง.2 (เสลี่ยงทอง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทภค1ภค97.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ภค.1 (ภูคี)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทภค2พานทอง98.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ภค.2 (พานทอง)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษฯทภค3ปาปรงพนป99.png" /></td><td>หน่วยพิทักษ์ฯ ที่ ภค.3 (ป่าปรงพันปี)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปากดเลาะ100.png" /></td><td>หน่วยพิทักษ์ป่ากุดเลาะ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาเกานอย101.png" /></td><td>หน่วยพิทักษ์ป่าเก่าน้อย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาแกงตาดไซ102.png" /></td><td>หน่วยพิทักษ์ป่าแก้งตาดไซ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาเขากระเจยว103.png" /></td><td>หน่วยพิทักษ์ป่าเขากระเจียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาคลองเจรญ104.png" /></td><td>หน่วยพิทักษ์ป่าคลองเจริญ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาคลองโปง105.png" /></td><td>หน่วยพิทักษ์ป่าคลองโป่ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาฉนวน106.png" /></td><td>หน่วยพิทักษ์ป่าฉนวน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาซบหวาย107.png" /></td><td>หน่วยพิทักษ์ป่าซับหวาย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาถำสงโต108.png" /></td><td>หน่วยพิทักษ์ป่าถ้ำสิงโต</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาทาเดอ109.png" /></td><td>หน่วยพิทักษ์ป่าท่าเดื่อ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปานำผด110.png" /></td><td>หน่วยพิทักษ์ป่าน้ำผุด</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาโนนศรสงา111.png" /></td><td>หน่วยพิทักษ์ป่าโนนศรีสง่า</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาบอมงามเขากระปอด112.png" /></td><td>หน่วยพิทักษ์ป่าบ่อมีงาม  (เขากระป็อด)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาบงแปน113.png" /></td><td>หน่วยพิทักษ์ป่าบึงแปน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาพรมโซง114.png" /></td><td>หน่วยพิทักษ์ป่าพรมโซ้ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาละเลงรอยร115.png" /></td><td>หน่วยพิทักษ์ป่าละเลิงร้อยรู</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาลาดนกเจา116.png" /></td><td>หน่วยพิทักษ์ป่าลาดนกเจ่า</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาศาลาพรม117.png" /></td><td>หน่วยพิทักษ์ป่าศาลาพรม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหนองนกออก118.png" /></td><td>หน่วยพิทักษ์ป่าหนองนกออก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหนองแปก119.png" /></td><td>หน่วยพิทักษ์ป่าหนองแปก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหนองไรไก120.png" /></td><td>หน่วยพิทักษ์ป่าหนองไรไก่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหวยกลำ121.png" /></td><td>หน่วยพิทักษ์ป่าห้วยกล่ำ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหวยแกว122.png" /></td><td>หน่วยพิทักษ์ป่าห้วยแก้ว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษปาหวยซ123.png" /></td><td>หน่วยพิทักษ์ป่าห้วยซุ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยพทกษอทยานแหงชาตชวคราวผาหวนาค124.png" /></td><td>หน่วยพิทักษ์อุทยานแห่งชาติชั่วคราว (ผาหัวนาค)</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยสกดเขาพงเหย125.png" /></td><td>หน่วยสกัดเขาพังเหย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยสกดหนองปลอง126.png" /></td><td>หน่วยสกัดหนองปล้อง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยสกดหวยยางด127.png" /></td><td>หน่วยสกัดห้วยยางดี</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หนวยอนรกษและจดการตนนำลำพระเพลง128.png" /></td><td>หน่วยอนุรักษ์และจัดการต้นน้ำลำพระเพลิง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หอควบคมรวไฟฟาท1129.png" /></td><td>หอควบคุมรั้วไฟฟ้าที่ 1</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หอควบคมรวไฟฟาท2130.png" /></td><td>หอควบคุมรั้วไฟฟ้าที่ 2</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หอควบคมรวไฟฟาท3131.png" /></td><td>หอควบคุมรั้วไฟฟ้าที่ 3</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_หองปฏบตการลาดตระเวนเชงคณภาพ132.png" /></td><td>ห้องปฏิบัติการลาดตระเวนเชิงคุณภาพ</td></tr><tr><td style="text-align: center;"><img src="legend/_7_4_133.png" /></td><td></td></tr></table>': cluster__7_4,'<img src="legend/_3.png" /> พื้นที่เตรียมผนวก': layer__3,'รวมใหม่_พื้นที่อนุรักษ์สบอ7และข้างเคียง<br /><table><tr><td style="text-align: center;"><img src="legend/_7_2_เขตรกษาพนธสตวปาซบลงกา0.png" /></td><td>เขตรักษาพันธุ์สัตว์ป่าซับลังกา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตรกษาพนธสตวปาดงใหญ1.png" /></td><td>เขตรักษาพันธุ์สัตว์ป่าดงใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตรกษาพนธสตวปาตะเบาะหวยใหญ2.png" /></td><td>เขตรักษาพันธุ์สัตว์ป่าตะเบาะ - ห้วยใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตรกษาพนธสตวปาผาผง3.png" /></td><td>เขตรักษาพันธุ์สัตว์ป่าผาผึ้ง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตรกษาพนธสตวปาภเขยว4.png" /></td><td>เขตรักษาพันธุ์สัตว์ป่าภูเขียว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาเขากระโดง5.png" /></td><td>เขตห้ามล่าสัตว์ป่าเขากระโดง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาเขาแผงมา6.png" /></td><td>เขตห้ามล่าสัตว์ป่าเขาแผงม้า</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาบงละหาน7.png" /></td><td>เขตห้ามล่าสัตว์ป่าบึงละหาน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาปาเขาภหลวง8.png" /></td><td>เขตห้ามล่าสัตว์ป่าป่าเขาภูหลวง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาลำนางรอง9.png" /></td><td>เขตห้ามล่าสัตว์ป่าลำนางรอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาหนองแวง10.png" /></td><td>เขตห้ามล่าสัตว์ป่าหนองแวง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาอางเกบนำสนามบน11.png" /></td><td>เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำสนามบิน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาอางเกบนำหวยจรเขมาก12.png" /></td><td>เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยจรเข้มาก</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_เขตหามลาสตวปาอางเกบนำหวยตลาด13.png" /></td><td>เขตห้ามล่าสัตว์ป่าอ่างเก็บน้ำห้วยตลาด</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_สวนรกขชาตนำผดทพลาว14.png" /></td><td>สวนรุกขชาติน้ำผุดทัพลาว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_สวนรกขชาตภกมขาว15.png" /></td><td>สวนรุกขชาติภูกุ้มข้าว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตเขาใหญ16.png" /></td><td>อุทยานแห่งชาติเขาใหญ่</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตเจดสาวนอย17.png" /></td><td>อุทยานแห่งชาติเจ็ดสาวน้อย</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตตาดโตน18.png" /></td><td>อุทยานแห่งชาติตาดโตน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตตาพระยา19.png" /></td><td>อุทยานแห่งชาติตาพระยา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตทบลาน20.png" /></td><td>อุทยานแห่งชาติทับลาน</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตไทรทอง21.png" /></td><td>อุทยานแห่งชาติไทรทอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตนำพอง22.png" /></td><td>อุทยานแห่งชาติน้ำพอง</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตนำหนาว23.png" /></td><td>อุทยานแห่งชาติน้ำหนาว</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตปาหนงาม24.png" /></td><td>อุทยานแห่งชาติป่าหินงาม</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_อทยานแหงชาตภแลนคา25.png" /></td><td>อุทยานแห่งชาติภูแลนคา</td></tr><tr><td style="text-align: center;"><img src="legend/_7_2_26.png" /></td><td></td></tr></table>': layer__7_2,"Google Satellite Hybrid": layer_GoogleSatelliteHybrid_1,"Google Terrain Hybrid": layer_GoogleTerrainHybrid_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: cluster__7_2,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Name_TH'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        </script>
+    </body>
+</html>
